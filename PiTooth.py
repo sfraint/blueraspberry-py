@@ -11,6 +11,10 @@ import evdev
 from evdev import *
 import keymap
 
+import uuid
+BT_PROFILE_PATH="/org/bluez/hci0"
+BT_UUID = str(uuid.uuid4())
+
 class Bluetooth:
   P_CTRL = 17
   P_INTR = 19
@@ -28,16 +32,22 @@ class Bluetooth:
     self.sinterrupt.bind(("", Bluetooth.P_INTR))
     self.bus = dbus.SystemBus()
 
-    self.manager = dbus.Interface(self.bus.get_object("org.bluez", "/"), "org.bluez.Manager")
-    adapter_path = self.manager.DefaultAdapter()
-    self.service = dbus.Interface(self.bus.get_object("org.bluez", adapter_path), "org.bluez.Service")
+    # Register the SDP defined in the XML file
+    self.manager = dbus.Interface(self.bus.get_object("org.bluez",
+                          "/org/bluez"), "org.bluez.ProfileManager1")
 
     with open(sys.path[0] + "/sdp_record.xml", "r") as fh:
       self.service_record = fh.read()
 
   def listen(self):
-    self.service_handle = self.service.AddRecord(self.service_record)
+    profile = {
+      "ServiceRecord" : self.service_record,
+    }
+
+    # Register our device profile
+    self.manager.RegisterProfile(BT_PROFILE_PATH, BT_UUID, profile)
     print "Service record added"
+
     self.scontrol.listen(1) # Limit of 1 connection
     self.sinterrupt.listen(1)
     print "Waiting for a connection"
