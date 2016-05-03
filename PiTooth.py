@@ -1,5 +1,6 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 #Code fixed from http://www.linuxuser.co.uk/tutorials/emulate-a-bluetooth-keyboard-with-the-raspberry-pi
+# Updated to work with Bluez 5
 
 import os
 import sys
@@ -12,7 +13,7 @@ from evdev import *
 import keymap
 
 import uuid
-BT_PROFILE_PATH="/org/bluez/hci0"
+BT_ADAPTER_PATH="/org/bluez/hci0"
 BT_UUID = str(uuid.uuid4())
 
 class Bluetooth:
@@ -23,14 +24,25 @@ class Bluetooth:
   PORT = 1
 
   def __init__(self):
-    os.system("hciconfig hci0 class 0x002540")
-    os.system("hciconfig hci0 name Raspberry\ Pi")
-    os.system("hciconfig hci0 piscan")
     self.scontrol = BluetoothSocket(L2CAP)
     self.sinterrupt = BluetoothSocket(L2CAP)
     self.scontrol.bind(("", Bluetooth.P_CTRL))
     self.sinterrupt.bind(("", Bluetooth.P_INTR))
     self.bus = dbus.SystemBus()
+
+    adapter = dbus.Interface(self.bus.get_object("org.bluez", BT_ADAPTER_PATH),
+                             "org.freedesktop.DBus.Properties")
+
+    # The Name and Class of a device should be statically configured
+    # according to the Bluez dbus interface docs. These are set
+    # in /etc/bluetooth/main.conf
+
+    adapter.Set("org.bluez.Adapter1", "Alias", "Raspberry Pi")
+    adapter.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+    adapter.Set("org.bluez.Adapter1", "PairableTimeout", dbus.UInt32(0))
+    adapter.Set("org.bluez.Adapter1", "Pairable", dbus.Boolean(1))
+    adapter.Set("org.bluez.Adapter1", "DiscoverableTimeout", dbus.UInt32(0))
+    adapter.Set("org.bluez.Adapter1", "Discoverable", dbus.Boolean(1))
 
     # Register the SDP defined in the XML file
     self.manager = dbus.Interface(self.bus.get_object("org.bluez",
@@ -45,7 +57,7 @@ class Bluetooth:
     }
 
     # Register our device profile
-    self.manager.RegisterProfile(BT_PROFILE_PATH, BT_UUID, profile)
+    self.manager.RegisterProfile(BT_ADAPTER_PATH, BT_UUID, profile)
     print "Service record added"
 
     self.scontrol.listen(1) # Limit of 1 connection
