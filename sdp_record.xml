@@ -1,114 +1,170 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <record>
-	<attribute id="0x0001">
+	<attribute id="0x0001"> <!-- Service Class ID List -->
 		<sequence>
-			<uuid value="0x1124" />
+			<uuid value="0x1124" /> <!-- Human Interface Device -->
 		</sequence>
 	</attribute>
-	<attribute id="0x0004">
+	<attribute id="0x0004"> <!-- Protocol Descriptor List -->
 		<sequence>
 			<sequence>
-				<uuid value="0x0100" />
-				<uint16 value="0x0011" />
+				<uuid value="0x0100" /> <!-- L2CAP -->
+				<uint16 value="0x0011" /> <!-- HIDP -->
 			</sequence>
 			<sequence>
-				<uuid value="0x0011" />
-			</sequence>
-		</sequence>
-	</attribute>
-	<attribute id="0x0005">
-		<sequence>
-			<uuid value="0x1002" />
-		</sequence>
-	</attribute>
-	<attribute id="0x0006">
-		<sequence>
-			<uint16 value="0x656e" />
-			<uint16 value="0x006a" />
-			<uint16 value="0x0100" />
-		</sequence>
-	</attribute>
-	<attribute id="0x0009">
-		<sequence>
-			<sequence>
-				<uuid value="0x1124" />
-				<uint16 value="0x0100" />
+				<uuid value="0x0011" /> <!-- HIDP -->
 			</sequence>
 		</sequence>
 	</attribute>
-	<attribute id="0x000d">
+	<attribute id="0x0005"> <!-- Browse Group List -->
+		<sequence>
+			<uuid value="0x1002" /> <!-- Public Browse Root(?) -->
+		</sequence>
+	</attribute>
+	<attribute id="0x0006"> <!-- Language Based Attribute ID List -->
+		<sequence>
+			<uint16 value="0x656e" /> <!-- code_ISO639 -->
+			<uint16 value="0x006a" /> <!-- encoding -->
+			<uint16 value="0x0100" /> <!-- base_offset -->
+		</sequence>
+	</attribute>
+	<attribute id="0x0009"> <!-- Bluetooth Profile Descriptor List -->
+		<sequence>
+			<sequence>
+				<uuid value="0x1124" /> <!-- Human Interface Device -->
+				<uint16 value="0x0101" /> <!-- Version 1.1(?) -->
+			</sequence>
+		</sequence>
+	</attribute>
+	<attribute id="0x000d"> <!-- Additional Protocol Descriptor Lists -->
 		<sequence>
 			<sequence>
 				<sequence>
-					<uuid value="0x0100" />
-					<uint16 value="0x0013" />
+					<uuid value="0x0100" /> <!-- L2CAP -->
+					<uint16 value="0x0013" /> <!-- HID Interrupt(?) -->
 				</sequence>
 				<sequence>
-					<uuid value="0x0011" />
+					<uuid value="0x0011" /> <!-- HIDP -->
 				</sequence>
 			</sequence>
 		</sequence>
 	</attribute>
-	<attribute id="0x0100">
-		<text value="Raspberry Pi Virtual Keyboard" />
+	<attribute id="0x0100"> <!-- Service Name(?) -->
+		<text value="Virtual Controller" />
 	</attribute>
-	<attribute id="0x0101">
-		<text value="USB > BT Keyboard" />
+	<attribute id="0x0101"> <!-- Service Description(?) -->
+		<text value="USB > BT N64 Controller" />
 	</attribute>
-	<attribute id="0x0102">
-		<text value="Raspberry Pi" />
+	<attribute id="0x0102"> <!-- Provider Name(?) -->
+		<text value="Bluetooth N64 controller" />
 	</attribute>
-	<attribute id="0x0200">
-		<uint16 value="0x0100" />
-	</attribute>
-	<attribute id="0x0201">
+	<attribute id="0x0201"> <!-- HID Parser Version(?) -->
 		<uint16 value="0x0111" />
 	</attribute>
-	<attribute id="0x0202">
-		<uint8 value="0x40" />
+	<attribute id="0x0202"> <!-- HID Device Subclass(?) -->
+		<uint8 value="0x08" /> <!-- Gamepad(?) -->
 	</attribute>
-	<attribute id="0x0203">
-		<uint8 value="0x00" />
+	<attribute id="0x0203"> <!-- HID Country Code(?) -->
+		<uint8 value="0x00" /> <!-- Not localized -->
 	</attribute>
-	<attribute id="0x0204">
-		<boolean value="true" />
+	<attribute id="0x0204"> <!-- HID Virtual Cable(?) -->
+		<boolean value="false" /> <!-- Not sure if we want this or not -->
 	</attribute>
-	<attribute id="0x0205">
-		<boolean value="true" />
+	<attribute id="0x0205"> <!-- HID Reconnect Initiate(?) -->
+		<boolean value="false" /> <!-- Not sure if we want this or not, but I think it's needed for virt cable -->
 	</attribute>
-	<attribute id="0x0206">
+	<attribute id="0x0206"> <!-- HID Descriptor List(?) -->
 		<sequence>
 			<sequence>
 				<uint8 value="0x22" />
-				<text encoding="hex" value="05010906a101850175019508050719e029e715002501810295017508810395057501050819012905910295017503910395067508150026ff000507190029ff8100c0050c0901a1018503150025017501950b0a23020a21020ab10109b809b609cd09b509e209ea09e9093081029501750d8103c0" />
+				<!-- text encoding="hex" value="05010904A101A102850175089505150026FF00350046FF00093009310932093209358102750495012507463B0165140939814265007501950C2501450105091901290C81020600FF750195082501450109018102C0A1027508950746FF0026FF0009029102C0C0029102C0C0" /--> <!-- This one is bad apparently... -->
+				<text encoding="hex" value="05010904A101A102850175089505150026FF00350046FF00093009310932093209358102750495012507463B0165140939814265007501950C2501450105091901290C81020600FF750195082501450109018102C0A1027508950746FF0026FF0009029102C0C0" />
+				<!--0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)-->
+				<!--0x09, 0x04,        // Usage (Joystick)-->
+				<!--0xA1, 0x01,        // Collection (Application)-->
+				
+				<!--0xA1, 0x02,        //   Collection (Logical)-->
+				<!--0x85, 0x01,        //     Report Id -->
+				<!--0x75, 0x08,        //     Report Size (8)-->
+				<!--0x95, 0x05,        //     Report Count (5)-->
+				<!--0x15, 0x00,        //     Logical Minimum (0)-->
+				<!--0x26, 0xFF, 0x00,  //     Logical Maximum (255)-->
+				<!--0x35, 0x00,        //     Physical Minimum (0)-->
+				<!--0x46, 0xFF, 0x00,  //     Physical Maximum (255)-->
+				<!--0x09, 0x30,        //     Usage (X)-->
+				<!--0x09, 0x31,        //     Usage (Y)-->
+				<!--0x09, 0x32,        //     Usage (Z)-->
+				<!--0x09, 0x32,        //     Usage (Z)-->
+				<!--0x09, 0x35,        //     Usage (Rz)-->
+				<!--0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)-->
+				
+				<!--0x75, 0x04,        //     Report Size (4)-->
+				<!--0x95, 0x01,        //     Report Count (1)-->
+				<!--0x25, 0x07,        //     Logical Maximum (7)-->
+				<!--0x46, 0x3B, 0x01,  //     Physical Maximum (315)-->
+				<!--0x65, 0x14,        //     Unit (System: English Rotation, Length: Centimeter)-->
+				<!--0x09, 0x39,        //     Usage (Hat switch)-->
+				<!--0x81, 0x42,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,Null State)-->
+
+				<!--0x65, 0x00,        //     Unit (None)-->
+				
+				<!--0x75, 0x01,        //     Report Size (1)-->
+				<!--0x95, 0x0C,        //     Report Count (12)-->
+				<!--0x25, 0x01,        //     Logical Maximum (1)-->
+				<!--0x45, 0x01,        //     Physical Maximum (1)-->
+				<!--0x05, 0x09,        //     Usage Page (Button)-->
+				<!--0x19, 0x01,        //     Usage Minimum (0x01)-->
+				<!--0x29, 0x0C,        //     Usage Maximum (0x0C)-->
+				<!--0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)-->
+				<!--0x06, 0x00, 0xFF,  //     Usage Page (Vendor Defined 0xFF00)-->
+				
+				<!--0x75, 0x01,        //     Report Size (1)-->
+				<!--0x95, 0x08,        //     Report Count (8)-->
+				<!--0x25, 0x01,        //     Logical Maximum (1)-->
+				<!--0x45, 0x01,        //     Physical Maximum (1)-->
+				<!--0x09, 0x01,        //     Usage (0x01)-->
+				<!--0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)-->
+				<!--0xC0,              //   End Collection-->
+				
+				<!--0xA1, 0x02,        //   Collection (Logical)-->
+				<!--0x75, 0x08,        //     Report Size (8)-->
+				<!--0x95, 0x07,        //     Report Count (7)-->
+				<!--0x46, 0xFF, 0x00,  //     Physical Maximum (255)-->
+				<!--0x26, 0xFF, 0x00,  //     Logical Maximum (255)-->
+				<!--0x09, 0x02,        //     Usage (0x02)-->
+				<!--0x91, 0x02,        //     Output (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)-->
+				<!--0xC0,              //   End Collection-->
+				
+				<!--0xC0,              // End Collection-->
+				<!--// 103 bytes-->
 			</sequence>
 		</sequence>
 	</attribute>
-	<attribute id="0x0207">
+	<attribute id="0x0207"> <!-- HID Lang ID Base List(?) -->
 		<sequence>
 			<sequence>
-				<uint16 value="0x0409" />
+				<uint16 value="0x0409" /> <!-- English US -->
 				<uint16 value="0x0100" />
 			</sequence>
 		</sequence>
 	</attribute>
-	<attribute id="0x020b">
-		<uint16 value="0x0100" />
-	</attribute>
-	<attribute id="0x020c">
-		<uint16 value="0x0c80" />
-	</attribute>
-	<attribute id="0x020d">
-		<boolean value="false" />
-	</attribute>
-	<attribute id="0x020e">
+	<attribute id="0x0209"> <!-- HID Battery Power(?) -->
 		<boolean value="true" />
 	</attribute>
-	<attribute id="0x020f">
+	<attribute id="0x020c"> <!-- HID Supervision Timeout(?) -->
+		<uint16 value="0x0c80" />
+	</attribute>
+	<attribute id="0x020d"> <!-- HID Normally Connectable(?) -->
+		<boolean value="false" />
+	</attribute>
+	<attribute id="0x020e"> <!-- HID Boot Device(?) -->
+		<boolean value="false" />
+	</attribute>
+	<attribute id="0x020f"> <!-- HID SSR Host Max Latency(?) -->
 		<uint16 value="0x0640" />
 	</attribute>
-	<attribute id="0x0210">
+	<attribute id="0x0210"> <!-- HID SSR Host Min Timeout(?) -->
 		<uint16 value="0x0320" />
 	</attribute>
 </record>
