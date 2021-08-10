@@ -12,7 +12,6 @@ import dbus
 import time
 import evdev
 from evdev import *
-import keymap
 
 import uuid
 
